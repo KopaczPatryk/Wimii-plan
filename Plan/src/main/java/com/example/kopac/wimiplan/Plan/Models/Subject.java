@@ -6,4 +6,8 @@ public class Subject implements Serializable {
     public String SubjectName;
     public String Teacher;
     public SubjectType Type;
+
+    public Subject(String subjectName) {
+        SubjectName = subjectName;
+    }
 }
