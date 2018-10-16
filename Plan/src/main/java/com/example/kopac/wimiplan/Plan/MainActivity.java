@@ -7,7 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+
+import com.example.kopac.wimiplan.Plan.Groups.GroupsActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,8 +38,8 @@ public class MainActivity extends AppCompatActivity implements GetTermsListener,
 
     @Override
     public void OnRecyclerItemClick(View view, int position) {
-        Intent intent = new Intent(this, SubjectsActivity.class);
-        intent.putExtra(SubjectsActivity.HYPERLINK_SUFFIX_BUNDLE, YearTerms.get(position));
+        Intent intent = new Intent(this, GroupsActivity.class);
+        intent.putExtra(GroupsActivity.HYPERLINK_SUFFIX_BUNDLE, YearTerms.get(position));
         startActivity(intent);
     }
 
@@ -67,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements GetTermsListener,
                 Term t = new Term();
                 t.TermName = elem.text();
                 t.HyperLink = elem.select("a").attr("href");
+
+                t.IsStationary = !t.HyperLink.toLowerCase().contains("niesta");
+
                 Log.d("scraper", t.HyperLink);
                 terms.add(t);
             }

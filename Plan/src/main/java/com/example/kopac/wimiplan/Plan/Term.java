@@ -5,7 +5,8 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-class Term implements Serializable {
+public class Term implements Serializable {
     public String TermName;
     public String HyperLink;
+    public boolean IsStationary;
 }
