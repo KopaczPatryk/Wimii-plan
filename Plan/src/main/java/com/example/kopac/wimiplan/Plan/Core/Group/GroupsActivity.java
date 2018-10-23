@@ -1,17 +1,15 @@
-package com.example.kopac.wimiplan.Plan.Groups;
+package com.example.kopac.wimiplan.Plan.Core.Group;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 
+import com.example.kopac.wimiplan.Plan.Adapters.GroupsAdapter;
+import com.example.kopac.wimiplan.Plan.Core.Schedule.GetSchoolWeekListener;
 import com.example.kopac.wimiplan.Plan.LinkHelper;
 import com.example.kopac.wimiplan.Plan.Models.Group;
 import com.example.kopac.wimiplan.Plan.Models.SchoolDaySchedule;
@@ -19,8 +17,8 @@ import com.example.kopac.wimiplan.Plan.Models.SchoolWeekSchedule;
 import com.example.kopac.wimiplan.Plan.Models.Subject;
 import com.example.kopac.wimiplan.Plan.R;
 import com.example.kopac.wimiplan.Plan.RecyclerViewClickListener;
-import com.example.kopac.wimiplan.Plan.Term;
-import com.example.kopac.wimiplan.Plan.Timetable.TimetableActivity;
+import com.example.kopac.wimiplan.Plan.Models.Semester;
+import com.example.kopac.wimiplan.Plan.Core.Schedule.ScheduleActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,7 +35,7 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
     public static final String TERM_BUNDLE_ID = "hyperlinksuffix";
     private RecyclerView GroupsRecyclerView;
     private List<Group> RetrievedGroups;
-    private Term Term;
+    private Semester Semester;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,26 +43,26 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
         GroupsRecyclerView = findViewById(R.id.groups_recycler);
         if (savedInstanceState != null)
         {
-            Term = (Term) savedInstanceState.getSerializable(TERM_BUNDLE_ID);
+            Semester = (Semester) savedInstanceState.getSerializable(TERM_BUNDLE_ID);
         }
         else
         {
-            Term = (Term)getIntent().getSerializableExtra(TERM_BUNDLE_ID);
+            Semester = (Semester)getIntent().getSerializableExtra(TERM_BUNDLE_ID);
         }
-        assert Term != null;
-        String hyperlink = LinkHelper.DOMAIN.concat(Term.HyperLink);
+        assert Semester != null;
+        String hyperlink = LinkHelper.DOMAIN.concat(Semester.HyperLink);
         new GetGroups(this).execute(hyperlink);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(TERM_BUNDLE_ID, Term);
+        outState.putSerializable(TERM_BUNDLE_ID, Semester);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Term = (Term) savedInstanceState.getSerializable(TERM_BUNDLE_ID);
+        Semester = (Semester) savedInstanceState.getSerializable(TERM_BUNDLE_ID);
         super.onRestoreInstanceState(savedInstanceState);
 
     }
@@ -86,14 +84,14 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
             }
         }
         RetrievedGroups = processedGroups;
-        GroupsRecyclerView.setAdapter(new GroupAdapter(processedGroups, this));
+        GroupsRecyclerView.setAdapter(new GroupsAdapter(processedGroups, this));
     }
 
     @Override
     public void OnRecyclerItemClick(View view, int position) {
         Group g = RetrievedGroups.get(position);
         String fullLink;
-        if (Term.IsStationary)
+        if (Semester.IsStationary)
         {
             fullLink = LinkHelper.STATIONARY_TTS + "/" + RetrievedGroups.get(position).Hyperlink;
         }
@@ -106,8 +104,8 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
 
     @Override
     public void OnSchoolWeekReceived(SchoolWeekSchedule timetable) {
-        Intent intent = new Intent(this, TimetableActivity.class);
-        intent.putExtra(TimetableActivity.ARG_TIMETABLE, timetable);
+        Intent intent = new Intent(this, ScheduleActivity.class);
+        intent.putExtra(ScheduleActivity.ARG_TIMETABLE, timetable);
         startActivity(intent);
 
     }

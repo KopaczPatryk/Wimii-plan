@@ -1,4 +1,4 @@
-package com.example.kopac.wimiplan.Plan.Groups;
+package com.example.kopac.wimiplan.Plan.Core.Group;
 
 import com.example.kopac.wimiplan.Plan.Models.Group;
 

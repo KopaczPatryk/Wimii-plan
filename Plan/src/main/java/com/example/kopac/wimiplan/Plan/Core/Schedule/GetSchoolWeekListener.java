@@ -1,4 +1,4 @@
-package com.example.kopac.wimiplan.Plan.Groups;
+package com.example.kopac.wimiplan.Plan.Core.Schedule;
 
 import com.example.kopac.wimiplan.Plan.Models.SchoolWeekSchedule;
 

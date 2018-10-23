@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".SchoolDayFragment"
-    tools:listitem="@layout/fragment_schoolday_subject" />
+    tools:context=".Core.Schedule.Day.SchoolDayFragment"
+    tools:listitem="@layout/fragment_schoolday_subject_row" />

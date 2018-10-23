@@ -1,4 +1,4 @@
-package com.example.kopac.wimiplan.Plan.Timetable;
+package com.example.kopac.wimiplan.Plan.Core.Schedule;
 
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -19,10 +19,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kopac.wimiplan.Plan.Models.SchoolWeekSchedule;
+import com.example.kopac.wimiplan.Plan.Core.Schedule.Day.SchoolDayFragment;
 import com.example.kopac.wimiplan.Plan.R;
-import com.example.kopac.wimiplan.Plan.SchoolDayFragment;
 
-public class TimetableActivity extends AppCompatActivity {
+public class ScheduleActivity extends AppCompatActivity {
     public static final String ARG_TIMETABLE = "timetable";
     private SchoolWeekSchedule Schedule = new SchoolWeekSchedule();
     /**
@@ -43,7 +43,7 @@ public class TimetableActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timetable);
+        setContentView(R.layout.activity_schedule);
         Schedule = (SchoolWeekSchedule) getIntent().getSerializableExtra(ARG_TIMETABLE);
 //        Schedule.DaySchedules = new ArrayList<>();
 //        SchoolDaySchedule daySchedule = new SchoolDaySchedule();
@@ -140,7 +140,7 @@ public class TimetableActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_timetable, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_schedule, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;

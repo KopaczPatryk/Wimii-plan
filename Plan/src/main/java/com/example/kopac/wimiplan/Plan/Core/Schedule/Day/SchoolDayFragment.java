@@ -1,4 +1,4 @@
-package com.example.kopac.wimiplan.Plan;
+package com.example.kopac.wimiplan.Plan.Core.Schedule.Day;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,16 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.kopac.wimiplan.Plan.Adapters.SchoolDaysAdapter;
 import com.example.kopac.wimiplan.Plan.Models.SchoolDaySchedule;
-import com.example.kopac.wimiplan.Plan.dummy.DummyContent;
-import com.example.kopac.wimiplan.Plan.dummy.DummyContent.DummyItem;
+import com.example.kopac.wimiplan.Plan.R;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class SchoolDayFragment extends Fragment {
     private SchoolDaySchedule DaySchedule;
     // TODO: Customize parameter argument names
@@ -72,7 +66,7 @@ public class SchoolDayFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new SchoolDayRecyclerViewAdapter(DaySchedule, mListener));
+            recyclerView.setAdapter(new SchoolDaysAdapter(DaySchedule, mListener));
         }
         return view;
     }

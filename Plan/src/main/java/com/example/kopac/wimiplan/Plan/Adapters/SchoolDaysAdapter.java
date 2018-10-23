@@ -1,4 +1,4 @@
-package com.example.kopac.wimiplan.Plan;
+package com.example.kopac.wimiplan.Plan.Adapters;
 
 import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
@@ -9,20 +9,15 @@ import android.widget.TextView;
 
 import com.example.kopac.wimiplan.Plan.Models.SchoolDaySchedule;
 import com.example.kopac.wimiplan.Plan.Models.Subject;
-import com.example.kopac.wimiplan.Plan.SchoolDayFragment.OnListFragmentInteractionListener;
-import com.example.kopac.wimiplan.Plan.dummy.DummyContent.DummyItem;
+import com.example.kopac.wimiplan.Plan.R;
+import com.example.kopac.wimiplan.Plan.Core.Schedule.Day.SchoolDayFragment.OnListFragmentInteractionListener;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class SchoolDayRecyclerViewAdapter extends RecyclerView.Adapter<SchoolDayRecyclerViewAdapter.ViewHolder> {
+public class SchoolDaysAdapter extends RecyclerView.Adapter<SchoolDaysAdapter.ViewHolder> {
 
     private final SchoolDaySchedule mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public SchoolDayRecyclerViewAdapter(SchoolDaySchedule items, OnListFragmentInteractionListener listener) {
+    public SchoolDaysAdapter(SchoolDaySchedule items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,7 +25,7 @@ public class SchoolDayRecyclerViewAdapter extends RecyclerView.Adapter<SchoolDay
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_schoolday_subject, parent, false);
+                .inflate(R.layout.fragment_schoolday_subject_row, parent, false);
         return new ViewHolder(view);
     }
 

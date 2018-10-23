@@ -1,4 +1,4 @@
-package com.example.kopac.wimiplan.Plan.Groups;
+package com.example.kopac.wimiplan.Plan.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,26 +13,26 @@ import com.example.kopac.wimiplan.Plan.RecyclerViewClickListener;
 
 import java.util.List;
 
-public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
+public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder> {
     private List<Group> Groups;
     private RecyclerViewClickListener clickListener;
 
-    public GroupAdapter(List<Group> groups, RecyclerViewClickListener listener) {
+    public GroupsAdapter(List<Group> groups, RecyclerViewClickListener listener) {
         this.Groups = groups;
         clickListener = listener;
     }
 
     @NonNull
     @Override
-    public GroupAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public GroupsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.subject_row, viewGroup, false);
+                .inflate(R.layout.group_row, viewGroup, false);
 
         return new ViewHolder(itemView, clickListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GroupAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull GroupsAdapter.ViewHolder viewHolder, int i) {
         viewHolder.GroupName.setText(Groups.get(i).GroupName);
     }
 

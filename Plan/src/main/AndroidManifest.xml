@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
-        <activity android:name=".MainActivity">
+        <activity android:name=".Core.Semester.SemestersActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -15,22 +15,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Groups.GroupsActivity"
+            android:name=".Core.Group.GroupsActivity"
             android:label="@string/title_activity_subjects"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".Core.Semester.SemestersActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.kopac.wimiplan.Plan.MainActivity" />
+                android:value="com.example.kopac.wimiplan.Plan.Core.Semester.SemestersActivity" />
         </activity>
         <activity
-            android:name=".Timetable.TimetableActivity"
+            android:name=".Core.Schedule.ScheduleActivity"
             android:label="@string/title_activity_timetable"
-            android:parentActivityName=".Groups.GroupsActivity"
+            android:parentActivityName=".Core.Group.GroupsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.kopac.wimiplan.Plan.Groups.GroupsActivity" />
+                android:value="com.example.kopac.wimiplan.Plan.Core.Group.GroupsActivity" />
         </activity>
     </application>
 

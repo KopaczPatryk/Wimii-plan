@@ -4,20 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Core.Group.GroupsActivity"
+    tools:context=".Core.Semester.SemestersActivity"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plany" />
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/groups_recycler"
+        android:id="@+id/termSelect"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/subject_recycler"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--app:layout_anchor="@id/app_bar"-->
-        <!--app:layout_anchorGravity="bottom|end"-->
-        <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
-
+        android:layout_height="wrap_content" >
+    </android.support.v7.widget.RecyclerView>
 </android.support.v7.widget.LinearLayoutCompat>
