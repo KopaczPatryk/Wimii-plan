@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SchoolWeekSchedule implements Serializable {
-    public List<SchoolDaySchedule> Schedules;
+    public List<SchoolDaySchedule> DaySchedules;
 
     public SchoolWeekSchedule () {
-        Schedules = new ArrayList<>();
+        DaySchedules = new ArrayList<>();
     }
 }

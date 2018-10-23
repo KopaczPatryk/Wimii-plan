@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SchoolDaySchedule implements Serializable {
-    //public String DayOfWeek;
+    public String DayOfWeek;
     public List<Subject> Subjects;
 
     public SchoolDaySchedule () {

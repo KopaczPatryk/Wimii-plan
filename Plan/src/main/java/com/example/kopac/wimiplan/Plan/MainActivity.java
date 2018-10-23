@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements GetTermsListener,
     @Override
     public void OnRecyclerItemClick(View view, int position) {
         Intent intent = new Intent(this, GroupsActivity.class);
-        intent.putExtra(GroupsActivity.HYPERLINK_SUFFIX_BUNDLE, YearTerms.get(position));
+        intent.putExtra(GroupsActivity.TERM_BUNDLE_ID, YearTerms.get(position));
         startActivity(intent);
     }
 

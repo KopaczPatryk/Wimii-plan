@@ -12,17 +12,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-import com.example.kopac.wimiplan.Plan.Models.SchoolDaySchedule;
 import com.example.kopac.wimiplan.Plan.Models.SchoolWeekSchedule;
 import com.example.kopac.wimiplan.Plan.R;
 import com.example.kopac.wimiplan.Plan.SchoolDayFragment;
-
-import java.util.ArrayList;
 
 public class TimetableActivity extends AppCompatActivity {
     public static final String ARG_TIMETABLE = "timetable";
@@ -47,14 +45,14 @@ public class TimetableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
         Schedule = (SchoolWeekSchedule) getIntent().getSerializableExtra(ARG_TIMETABLE);
-//        Schedule.Schedules = new ArrayList<>();
+//        Schedule.DaySchedules = new ArrayList<>();
 //        SchoolDaySchedule daySchedule = new SchoolDaySchedule();
 //        daySchedule.SetTestData();
-//        Schedule.Schedules.add(daySchedule);
-//        Schedule.Schedules.add(daySchedule);
-//        Schedule.Schedules.add(daySchedule);
-//        Schedule.Schedules.add(daySchedule);
-//        Schedule.Schedules.add(daySchedule);
+//        Schedule.DaySchedules.add(daySchedule);
+//        Schedule.DaySchedules.add(daySchedule);
+//        Schedule.DaySchedules.add(daySchedule);
+//        Schedule.DaySchedules.add(daySchedule);
+//        Schedule.DaySchedules.add(daySchedule);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,7 +80,16 @@ public class TimetableActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
@@ -155,12 +162,12 @@ public class TimetableActivity extends AppCompatActivity {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             //return PlaceholderFragment.newInstance(position + 1);
-            return SchoolDayFragment.newInstance(Schedule.Schedules.get(position));
+            return SchoolDayFragment.newInstance(Schedule.DaySchedules.get(position));
         }
 
         @Override
         public int getCount() {
-            return Schedule.Schedules.size();
+            return Schedule.DaySchedules.size();
         }
     }
 }

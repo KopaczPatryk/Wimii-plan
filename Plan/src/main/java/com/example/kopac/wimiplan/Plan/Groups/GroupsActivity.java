@@ -3,9 +3,13 @@ package com.example.kopac.wimiplan.Plan.Groups;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.kopac.wimiplan.Plan.LinkHelper;
@@ -30,20 +34,39 @@ import java.util.Comparator;
 import java.util.List;
 
 public class GroupsActivity extends AppCompatActivity implements GetGroupsListener, GetSchoolWeekListener, RecyclerViewClickListener {
-    public static final String HYPERLINK_SUFFIX_BUNDLE = "hyperlinksuffix";
-    //public static final String ARG_STATIONARY = "studiumtype";
+    public static final String TERM_BUNDLE_ID = "hyperlinksuffix";
     private RecyclerView GroupsRecyclerView;
     private List<Group> RetrievedGroups;
-    private boolean IsStationary = false;
+    private Term Term;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups);
         GroupsRecyclerView = findViewById(R.id.groups_recycler);
-        Term term = (Term)getIntent().getSerializableExtra(HYPERLINK_SUFFIX_BUNDLE);
-        IsStationary = term.IsStationary;
-        String hyperlink = LinkHelper.DOMAIN.concat(term.HyperLink);
+        if (savedInstanceState != null)
+        {
+            Term = (Term) savedInstanceState.getSerializable(TERM_BUNDLE_ID);
+        }
+        else
+        {
+            Term = (Term)getIntent().getSerializableExtra(TERM_BUNDLE_ID);
+        }
+        assert Term != null;
+        String hyperlink = LinkHelper.DOMAIN.concat(Term.HyperLink);
         new GetGroups(this).execute(hyperlink);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(TERM_BUNDLE_ID, Term);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Term = (Term) savedInstanceState.getSerializable(TERM_BUNDLE_ID);
+        super.onRestoreInstanceState(savedInstanceState);
+
     }
 
     @Override
@@ -70,7 +93,7 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
     public void OnRecyclerItemClick(View view, int position) {
         Group g = RetrievedGroups.get(position);
         String fullLink;
-        if (IsStationary)
+        if (Term.IsStationary)
         {
             fullLink = LinkHelper.STATIONARY_TTS + "/" + RetrievedGroups.get(position).Hyperlink;
         }
@@ -129,7 +152,6 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
         }
         @Override
         protected SchoolWeekSchedule doInBackground(String... strings) {
-            SchoolWeekSchedule weekTT = new SchoolWeekSchedule();
 
             Document document = null;
             try {
@@ -139,23 +161,42 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
             }
             assert document != null;
             Elements rows = document.select("tbody > tr");
+            SchoolWeekSchedule week = new SchoolWeekSchedule();
 
-            for (int col = 1; col < rows.get(0).children().size(); col++) {
-                //get hour
+            for (int x = 1; x < rows.get(0).children().size(); x++) {
                 SchoolDaySchedule day = new SchoolDaySchedule();
-
-                for (int i = 1; i < rows.size(); i++) {
-                    Log.i("scraped", rows.get(i).child(0).text());
+                day.DayOfWeek = rows.get(0).child(x).text().substring(0, 2);
+                week.DaySchedules.add(day);
+                for (int y = 1; y < rows.size() ; y++)
+                {
                     Subject s = new Subject();
-                    String hour = rows.get(i).child(0).text();
+                    day.Subjects.add(s);
+
+                    String hour = rows.get(y).child(0).text();
+                    Log.i("scraped", hour);
                     String[] split = hour.split(" ");
                     s.HourStart = split[1].split("-")[0];
-                    day.Subjects.add(s);
-                }
-                weekTT.Schedules.add(day);
-            }
 
-            return weekTT;
+                    //subject name
+                    String cellText = rows.get(y).child(x).html();
+                    if (!cellText.equals("&nbsp;"))
+                    {
+
+                        //split("[\\w.]+\\.");
+                        String[] cellSplit = cellText.split("<br>");
+                        String subjectName = cellSplit[0];
+                        s.SubjectName = subjectName.trim();
+                        if (cellSplit.length > 1) {
+                            s.Teacher = cellSplit[1];
+                        }
+                        if (cellSplit.length > 2) {
+                            s.Room = cellSplit[cellSplit.length - 1];
+                        }
+                    }
+
+                }
+            }
+            return week;
         }
 
         @Override
