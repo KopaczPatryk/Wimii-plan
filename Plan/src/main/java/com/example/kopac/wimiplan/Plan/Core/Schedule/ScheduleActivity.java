@@ -1,29 +1,27 @@
 package com.example.kopac.wimiplan.Plan.Core.Schedule;
 
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 
-import com.example.kopac.wimiplan.Plan.Models.SchoolWeekSchedule;
 import com.example.kopac.wimiplan.Plan.Core.Schedule.Day.SchoolDayFragment;
+import com.example.kopac.wimiplan.Plan.Models.SchoolWeekSchedule;
 import com.example.kopac.wimiplan.Plan.R;
 
 public class ScheduleActivity extends AppCompatActivity {
-    public static final String ARG_TIMETABLE = "timetable";
+    public static final String ARG_WEEKSCHEDULE = "timetable";
     private SchoolWeekSchedule Schedule = new SchoolWeekSchedule();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -44,7 +42,7 @@ public class ScheduleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
-        Schedule = (SchoolWeekSchedule) getIntent().getSerializableExtra(ARG_TIMETABLE);
+        Schedule = (SchoolWeekSchedule) getIntent().getSerializableExtra(ARG_WEEKSCHEDULE);
 //        Schedule.DaySchedules = new ArrayList<>();
 //        SchoolDaySchedule daySchedule = new SchoolDaySchedule();
 //        daySchedule.SetTestData();
@@ -66,6 +64,11 @@ public class ScheduleActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.removeAllTabs();
+        for (int i = 0; i < Schedule.DaySchedules.size(); i++){
+            tabLayout.addTab(tabLayout.newTab().setText(Schedule.DaySchedules.get(i).DayOfWeek));
+        }
+        mSectionsPagerAdapter.notifyDataSetChanged();
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));

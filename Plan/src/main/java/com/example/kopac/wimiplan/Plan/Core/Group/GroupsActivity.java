@@ -9,12 +9,12 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.kopac.wimiplan.Plan.Adapters.GroupsAdapter;
-import com.example.kopac.wimiplan.Plan.Core.Schedule.GetSchoolWeekListener;
 import com.example.kopac.wimiplan.Plan.LinkHelper;
 import com.example.kopac.wimiplan.Plan.Models.Group;
 import com.example.kopac.wimiplan.Plan.Models.SchoolDaySchedule;
 import com.example.kopac.wimiplan.Plan.Models.SchoolWeekSchedule;
 import com.example.kopac.wimiplan.Plan.Models.Subject;
+import com.example.kopac.wimiplan.Plan.Models.SubjectType;
 import com.example.kopac.wimiplan.Plan.R;
 import com.example.kopac.wimiplan.Plan.RecyclerViewClickListener;
 import com.example.kopac.wimiplan.Plan.Models.Semester;
@@ -26,6 +26,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.NotSerializableException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -98,16 +99,16 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
         else {
             fullLink = LinkHelper.NONSTATIONARY_TTS + "/" + RetrievedGroups.get(position).Hyperlink;
         }
-        new GetSchoolWeekSchedule(this).execute(fullLink);
+        new GetSchoolWeekSchedule(this, Semester.IsStationary).execute(fullLink);
 //        Toast.makeText(this, RetrievedGroups.get(position), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void OnSchoolWeekReceived(SchoolWeekSchedule timetable) {
+    public void OnSchoolWeekReceived(SchoolWeekSchedule weekSchedule) {
+        weekSchedule.TrimAll();
         Intent intent = new Intent(this, ScheduleActivity.class);
-        intent.putExtra(ScheduleActivity.ARG_TIMETABLE, timetable);
+        intent.putExtra(ScheduleActivity.ARG_WEEKSCHEDULE, weekSchedule);
         startActivity(intent);
-
     }
 
     public static class GetGroups extends AsyncTask<String, Void, List<Group>> {
@@ -145,12 +146,13 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
     }
     public static class GetSchoolWeekSchedule extends AsyncTask<String, Void, SchoolWeekSchedule> {
         private GetSchoolWeekListener listener;
-        public GetSchoolWeekSchedule( GetSchoolWeekListener listener) {
+        private boolean IsStatinary;
+        public GetSchoolWeekSchedule(GetSchoolWeekListener listener, boolean stationary) {
             this.listener = listener;
+            IsStatinary = stationary;
         }
         @Override
         protected SchoolWeekSchedule doInBackground(String... strings) {
-
             Document document = null;
             try {
                 document = Jsoup.connect(strings[0]).timeout(30000).validateTLSCertificates(false).get();
@@ -163,7 +165,11 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
 
             for (int x = 1; x < rows.get(0).children().size(); x++) {
                 SchoolDaySchedule day = new SchoolDaySchedule();
-                day.DayOfWeek = rows.get(0).child(x).text().substring(0, 2);
+                if (IsStatinary) {
+                    day.DayOfWeek = rows.get(0).child(x).text().substring(0, 3);
+                } else {
+                    day.DayOfWeek = rows.get(0).child(x).html().split("<br>")[0] + " " + rows.get(0).child(x).html().split("<br>")[1].substring(0,3);
+                }
                 week.DaySchedules.add(day);
                 for (int y = 1; y < rows.size() ; y++)
                 {
@@ -182,8 +188,24 @@ public class GroupsActivity extends AppCompatActivity implements GetGroupsListen
 
                         //split("[\\w.]+\\.");
                         String[] cellSplit = cellText.split("<br>");
-                        String subjectName = cellSplit[0];
-                        s.SubjectName = subjectName.trim();
+                        cellSplit[0] = cellSplit[0].trim();
+                        if (cellSplit[0].toLowerCase().contains("wyk") || cellSplit[0].toLowerCase().contains("lab") || cellSplit[0].toLowerCase().contains("cw")) {
+                            String subjectName = cellSplit[0].substring(0, cellSplit[0].lastIndexOf(' '));
+                            s.SubjectName = subjectName.trim();
+                        }
+                        else {
+                            String subjectName = cellSplit[0];
+                            s.SubjectName = subjectName.trim();
+                        }
+
+                        if (cellSplit[0].toLowerCase().contains("wyk"))
+                        {
+                            s.Type = SubjectType.Lecture;
+                        } else if (cellSplit[0].toLowerCase().contains("lab")) {
+                            s.Type = SubjectType.Laboratory;
+                        } else if (cellSplit[0].toLowerCase().contains("ćw")) {
+                            s.Type = SubjectType.Exercise;
+                        }
                         if (cellSplit.length > 1) {
                             s.Teacher = cellSplit[1];
                         }
